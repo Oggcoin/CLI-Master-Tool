@@ -1,4 +1,3 @@
-````md
 # 🪨 OGG CLI Master Tool
 
 ## One Tool. Everything OGG Need.
@@ -16,7 +15,7 @@ Copper move.
 
 ```bash
 ogg <command>
-````
+```
 
 🪨 No UI.
 🪨 No server.
@@ -58,10 +57,9 @@ The release package includes:
 ```text
 index.js                 Main CLI logic
 package.json             Dependency list
-package-lock.json        Locked dependency versions
 OGG-CLI.bat              Windows launcher
-ogg                      Linux/macOS launcher
-keystore.example.json    Example wallet file
+OGG-CLI.sh               Linux launcher
+OGG-CLI.command          macOS launcher
 README.md                Guide
 ```
 
@@ -70,7 +68,6 @@ Do **not** upload or share:
 ```text
 keystore.json
 private key
-seed phrase
 password
 ```
 
@@ -90,31 +87,69 @@ Download and extract the package.
 
 ---
 
-### 2. Create wallet file
+### 2. Launch CLI
 
-Copy:
+**Windows** — double-click or run:
 
 ```text
-keystore.example.json
+OGG-CLI.bat
 ```
 
-Rename the copy to:
+**Linux** — run:
+
+```bash
+chmod +x OGG-CLI.sh
+./OGG-CLI.sh
+```
+
+**macOS** — double-click or run:
+
+```bash
+chmod +x OGG-CLI.command
+./OGG-CLI.command
+```
+
+Launcher installs dependencies automatically on first run.
+
+---
+
+### 3. First launch — wallet setup
+
+On first launch, CLI detects no wallet and runs setup wizard automatically:
+
+```text
+No wallet found. Let's get you set up.
+
+1. Generate a new Oggcoin wallet
+2. Import an existing wallet (paste private key)
+
+Choose (1 or 2):
+```
+
+**Option 1 — Generate new wallet:**  
+CLI creates a fresh wallet and shows address + private key on screen.  
+Write down private key before pressing Enter — after this screen it is encrypted and hidden forever.
+
+**Option 2 — Import existing wallet:**  
+Paste your private key (input is hidden).  
+CLI connects to Oggchain and shows address + balance to confirm it is the right wallet.
+
+After either option — CLI asks to set a password (min 4 chars, confirmed twice).  
+Private key is encrypted with **AES-256-GCM + PBKDF2** and saved to `keystore.json`.
+
+Every launch after that — just enter password. Session stays unlocked until `exit`.
+
+---
+
+### Do not share
 
 ```text
 keystore.json
+private key
+password
 ```
 
-Open `keystore.json` and paste private key:
-
-```json
-{
-  "privateKey": "PASTE_YOUR_PRIVATE_KEY_HERE"
-}
-```
-
-On first launch, OGG CLI encrypts the key and asks OGG to create password.
-
-After that, password is required every time CLI opens.
+🪨 Private key is private. Tribe never ask.
 
 ---
 
@@ -137,28 +172,91 @@ If dependencies are missing, launcher installs them automatically.
 
 ---
 
-## 🐧 Linux / macOS Usage
+## 🐧 Linux Usage
 
 Make launcher executable:
 
 ```bash
-chmod +x ogg
+chmod +x OGG-CLI.sh
 ```
 
 Run:
 
 ```bash
-./ogg
+./OGG-CLI.sh
 ```
 
 Or run command directly:
 
 ```bash
-./ogg balance
-./ogg stake 1000
+./OGG-CLI.sh balance
+./OGG-CLI.sh stake 1000
 ```
 
 If dependencies are missing, launcher installs them automatically.
+
+---
+
+## 🍎 macOS Usage
+
+Make launcher executable:
+
+```bash
+chmod +x OGG-CLI.command
+```
+
+Run:
+
+```bash
+./OGG-CLI.command
+```
+
+Or run command directly:
+
+```bash
+./OGG-CLI.command balance
+./OGG-CLI.command stake 1000
+```
+
+If dependencies are missing, launcher installs them automatically.
+
+---
+
+## 👛 Wallet Commands
+
+Check balance.
+Send copper.
+Receive copper.
+See history.
+Export key.
+
+```bash
+ogg wallet
+ogg send <to> <amount>
+ogg receive
+ogg history
+ogg exportkey
+```
+
+### Examples
+
+```bash
+ogg wallet
+ogg send 0x1234...abcd 100
+ogg receive
+ogg history
+ogg exportkey
+```
+
+**What each does:**
+
+- `wallet` — shows your address + current OGG balance
+- `send <to> <amount>` — send OGG to any address, shows confirmation summary before broadcasting
+- `receive` — displays your address to share with sender
+- `history` — scans last 500 blocks, shows last 20 transactions (sends, receives, stakes, unstakes, claims and more)
+- `exportkey` — decrypts and shows your private key on screen (password required again)
+
+🪨 Nothing sends without OGG confirm first.
 
 ---
 
@@ -251,6 +349,9 @@ Reading chain is free.
 Free/read commands:
 
 ```bash
+ogg wallet
+ogg receive
+ogg history
 ogg balance
 ogg rewards
 ogg cooldown
@@ -264,6 +365,7 @@ Writing to chain costs small OGG gas fee.
 Transaction commands:
 
 ```bash
+ogg send <to> <amount>
 ogg stake <amount>
 ogg unstake <amount>
 ogg withdraw
@@ -303,7 +405,6 @@ Never share:
 ```text
 keystore.json
 private key
-seed phrase
 password
 ```
 
@@ -336,19 +437,7 @@ Run:
 npm install
 ```
 
-Or just launch:
-
-```text
-OGG-CLI.bat
-```
-
-or:
-
-```bash
-./ogg
-```
-
-Launcher installs dependencies if missing.
+Or just launch the launcher for your platform — it installs dependencies automatically.
 
 ---
 
@@ -358,7 +447,7 @@ If password is wrong, CLI cannot unlock wallet.
 
 Only delete encrypted `keystore.json` if OGG still has private key safely backed up.
 
-Then create new `keystore.json` from `keystore.example.json`.
+Then launch CLI again — setup wizard will run automatically.
 
 ---
 
@@ -375,6 +464,3 @@ No trust needed.
 Just OGG, terminal, and blockchain.
 
 🪨
-
-```
-```
